@@ -74,9 +74,9 @@ void DoRSMT::PrintRsmtTable() {
 	double r_smt_A_err_sys = 100 * this->GetRsmtSystError(AbcdBase::A);
 	double r_smt_B_err_sys = 100 * this->GetRsmtSystError(AbcdBase::B);
 	double r_smt_C_err_sys = 100 * this->GetRsmtSystError(AbcdBase::C);
-	double r_smt_wgt_err_sys = 100 * this->GetRsmtWgtSystErr();
+	double r_smt_wgt_err_sys = this->GetRsmtWgtSystErr() * r_smt_wgt;
 
-	std::cout << std::setprecision(7);
+	std::cout << std::setprecision(4);
 	std::cout << "| " << this->GetLabel() << " | " << r_smt_A << AbcdBase::pm
 			<< r_smt_A_err_stat << "(stat)" << AbcdBase::pm << r_smt_A_err_sys
 			<< "(syst) | " << r_smt_B << AbcdBase::pm << r_smt_B_err_stat
@@ -247,20 +247,21 @@ double DoRSMT::GetRsmtWgtStatErr() {
 
 // Get syst error on RsmtWGT
 double DoRSMT::GetRsmtWgtSystErr() {
-	DoRSMT* up = new DoRSMT(jet_bin_, is_inclusive_, 2);
-	DoRSMT* down = new DoRSMT(jet_bin_, is_inclusive_, 0);
 
-	double r_smt_wgt_up = up->GetRsmtWgt();
-	double r_smt_wgt_down = down->GetRsmtWgt();
-	double nominal = this->GetRsmtWgt();
+	double r_smt_A = this->GetRsmt(AbcdBase::A);
+	double r_smt_B = this->GetRsmt(AbcdBase::B);
+	double r_smt_C = this->GetRsmt(AbcdBase::C);
 
-	double max_syst = std::max(fabs(r_smt_wgt_down - nominal),
-			fabs(r_smt_wgt_up - nominal));
+	std::vector<double> regions;
+	regions.push_back(r_smt_A);
+	regions.push_back(r_smt_B);
+	regions.push_back(r_smt_C);
 
-	delete up;
-	delete down;
+	std::vector<double>::iterator smallest = std::min_element(regions.begin(), regions.end());
+	std::vector<double>::iterator largest = std::max_element(regions.begin(), regions.end());
 
-	return max_syst;
+	double max_syst = (*largest - *smallest) / *smallest;
+	return (max_syst / 2);
 } // End of GetRsmtWgtStatErr
 /*-----*/
 
@@ -302,9 +303,8 @@ double DoRSMT::GetTagEstimateStatError(void) {
 
 // TODO - Fill this in.
 double DoRSMT::GetTagEstimateSystError(void) {
-	double r_smt_wgt = this->GetRsmtWgt();
-	double r_smt_wgt_err = this->GetRsmtWgtStatErr();
-	double r_smt_bit = r_smt_wgt_err / r_smt_wgt;
+
+	double r_smt_wgt_err = this->GetRsmtWgtSystErr();
 
 	double pretag_estimate = this->GetPretagEstimate();
 	double pretag_estimate_err = pretag_estimate / 2;
@@ -313,10 +313,10 @@ double DoRSMT::GetTagEstimateSystError(void) {
 	double tag_estimate = this->GetTagEstimate();
 
 	return tag_estimate
-			* sqrt(
-					pretag_estimate_bit * pretag_estimate_bit
-							+ r_smt_bit * r_smt_bit);
+			* sqrt(pretag_estimate_bit * pretag_estimate_bit
+							+ r_smt_wgt_err * r_smt_wgt_err);
 } //
+
 /*-----*/
 
 //
