@@ -16,6 +16,7 @@ DataSample::DataSample(TString sample_name_) :
 
 DataSample::~DataSample() {
 	file->Close();
+	delete file;
 	sample_name = "";
 	sample_path = "";
 	sample_full_name = "";
