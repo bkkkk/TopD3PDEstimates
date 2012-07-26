@@ -27,7 +27,7 @@ ABCDReader::ABCDReader(DataSample* sample, TString mode, int jet_bin,
 {
 	this->setRegionIntegralsAndErrors();
 }
-
+ 
 ABCDReader::~ABCDReader() {
 	nA_ = 0.;
 	nB_ = 0.;
