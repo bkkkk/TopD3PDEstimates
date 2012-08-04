@@ -1,0 +1,382 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+			[
+				"br_",
+				"br_sys"
+			],
+			[
+				"sam",
+				"sample_name_"
+			],
+			[
+				"sys_br",
+				"sys_br"
+			],
+			[
+				"C",
+				"C"
+			],
+			[
+				"histB",
+				"histBaseNameTagged"
+			],
+			[
+				"histBa",
+				"histBaseNamePretag"
+			],
+			[
+				"m_cha",
+				"m_chain"
+			],
+			[
+				"Trigger",
+				"TriggerFunction"
+			],
+			[
+				"trigg",
+				"trigger_name"
+			],
+			[
+				"m_evts",
+				"m_evtsPassQcdmmLoose"
+			],
+			[
+				"nr",
+				"nr"
+			],
+			[
+				"nf",
+				"nf"
+			],
+			[
+				"cu",
+				"current_label"
+			],
+			[
+				"list_of",
+				"list_of_histos"
+			],
+			[
+				"current",
+				"current_label"
+			],
+			[
+				"curr",
+				"current_label"
+			],
+			[
+				"list_",
+				"list_of_labels"
+			],
+			[
+				"hist",
+				"histo_file_name"
+			],
+			[
+				"singlet",
+				"singletop_temp"
+			],
+			[
+				"diboso",
+				"diboson_temp"
+			],
+			[
+				"wjets",
+				"wjets_temp"
+			],
+			[
+				"zjets",
+				"zjets_temp"
+			],
+			[
+				"data",
+				"data_temp"
+			],
+			[
+				"sin",
+				"singletop"
+			],
+			[
+				"singletop",
+				"singleTop"
+			]
+		]
+	},
+	"buffers":
+	[
+	],
+	"build_system": "Packages/C++/C++.sublime-build",
+	"command_palette":
+	{
+		"height": 392.0,
+		"selected_items":
+		[
+		],
+		"width": 404.0
+	},
+	"console":
+	{
+		"height": 0.0
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"file_history":
+	[
+		"/Users/jayb88/jblanco/MainD3PD/runSMTSyst/TaggingRate/add.sh",
+		"/Users/jayb88/jblanco/MainD3PD/runSMTSyst/TaggingRate/ttbarSig/add.sh",
+		"/Users/jayb88/jblanco/MainD3PD/runSMTSyst/TaggingRate/singleTop/add.sh",
+		"/Users/jayb88/jblanco/MainD3PD/runSMTSyst/TaggingRate/dataAllEgamma2/add.sh",
+		"/Users/jayb88/jblanco/MainD3PD/runSMTSyst/TaggingRate/diBoson/add.sh",
+		"/Users/jayb88/jblanco/MainD3PD/runSMTSyst/TaggingRate/Zjets/add.sh",
+		"/Users/jayb88/jblanco/MainD3PD/runSMTSyst/TaggingRate/WjetsScaled/add.sh",
+		"/Users/jayb88/Dropbox/WorkArea/TopD3PDEstimate/Debug/runSMTsys/runAllSMTSys.sh",
+		"/Users/jayb88/Dropbox/WorkArea/TopD3PDEstimate/Debug/runSMTsys/makeDirInitial.sh",
+		"/Users/jayb88/Dropbox/WorkArea/TopD3PDEstimate/RawNumbersBRSyst.txt",
+		"/Users/jayb88/Dropbox/WorkArea/TopD3PDEstimate/DoRSMT.cpp",
+		"/Users/jayb88/Dropbox/WorkArea/TopD3PDEstimate/Debug/jobOptions_runRSMT.C",
+		"/Users/jayb88/jblanco/MainD3PD/SMTnTupAnalysis/Root/TaggingRateFull.cxx",
+		"/Users/jayb88/Dropbox/WorkArea/TopD3PDEstimate/DoABCD.cpp",
+		"/Users/jayb88/Dropbox/WorkArea/TopD3PDEstimate/ABCDReader.cpp",
+		"/Users/jayb88/Dropbox/WorkArea/TopD3PDEstimate/DataSample.cpp",
+		"/Users/jayb88/Dropbox/WorkArea/TopD3PDEstimate/TopD3PDEstimate.sublime-project",
+		"/Users/jayb88/Dropbox/WorkArea/TopD3PDEstimate/AbcdBase.h",
+		"/Users/jayb88/Dropbox/WorkArea/TopD3PDEstimate/AbcdBase.cpp",
+		"/Users/jayb88/Dropbox/WorkArea/TopD3PDEstimate/DataSample.h",
+		"/Users/jayb88/Dropbox/WorkArea/TopD3PDEstimate/ABCDReader.h",
+		"/Users/jayb88/Dropbox/WorkArea/TopD3PDEstimate/DoRSMT.h",
+		"/Users/jayb88/jblanco/MainD3PD/SMTnTupAnalysis/SMTnTupAnalysis/TaggingRateFull.h",
+		"/Users/jayb88/jblanco/MainD3PD/runSMTSyst/runZjets.sh",
+		"/Users/jayb88/jblanco/MainD3PD/runSMTSyst/runTtbar.sh",
+		"/Users/jayb88/jblanco/MainD3PD/runSMTSyst/runSingleTop.sh",
+		"/Users/jayb88/jblanco/MainD3PD/runSMTSyst/runDiboson.sh",
+		"/Users/jayb88/jblanco/MainD3PD/runSMTSyst/runData.sh",
+		"/Users/jayb88/jblanco/MainD3PD/runSMTSyst/runAllSyst.sh",
+		"/Users/jayb88/jblanco/MainD3PD/runSMTSyst/runWJets.sh",
+		"/Users/jayb88/test.cpp",
+		"/Users/jayb88/jblanco/MainD3PD/runSMTSyst/runZsample.sh",
+		"/Users/jayb88/INT/trunk/QCDelectron.tex",
+		"/Users/jayb88/jblanco/MainD3PD/runSMTSyst/runSingleT.sh",
+		"/Users/jayb88/jblanco/MainD3PD/SMTnTupAnalysis/util/TaggingRateFullMain.cxx",
+		"/Users/jayb88/jblanco/TnPD3PD/topRootCore00-00-17-TrigEff/TopD3PDAnalysis/Root/TrigEff_nTupJacob.cxx",
+		"/Users/jayb88/jblanco/TnPD3PD/topRootCore00-00-17-TrigEff/TopD3PDAnalysis/TopD3PDAnalysis/TrigEff_nTupSMWZ.h",
+		"/Users/jayb88/jblanco/TnPD3PD/topRootCore00-00-17-TrigEff/TopD3PDAnalysis/Root/TrigEff_nTupSMWZ.cxx",
+		"/Users/jayb88/jblanco/MainD3PD/SMTnTupAnalysis/SMTnTupAnalysis/SMTttbarLplusJetsAnalysis.h",
+		"/Users/jayb88/jblanco/MainD3PD/TopD3PDSelection/Root/SemiLeptonicSMT.cxx",
+		"/Users/jayb88/INT/trunk/QCDmuon.tex",
+		"/Users/jayb88/jblanco/MainD3PD/TopD3PDSelection/Root/SemiLeptonic",
+		"/Users/jayb88/Dropbox/WorkArea/TopD3PDEstimate/Debug/jobOptions_runABCD.C",
+		"/Users/jayb88/Dropbox/WorkArea/TopD3PDEstimate/Debug/jobOptions_runRsmtWgt.C",
+		"/Users/jayb88/Desktop/List of ABCD",
+		"/Users/jayb88/jblanco/MainD3PD/SMTnTupAnalysis/Plots/plotting.cpp",
+		"/Users/jayb88/jblanco/MainD3PD/SMTnTupAnalysis/Plots/dataAllEgamma/plotting.cpp",
+		"/Users/jayb88/jblanco/MainD3PD/SMTnTupAnalysis/Root/LinkDef.h",
+		"/Users/jayb88/jblanco/MainD3PD/SMTnTupAnalysis/Root/RunTaggingRateFull.cxx",
+		"/Users/jayb88/jblanco/MainD3PD/SMTnTupAnalysis/SMTnTupAnalysis/RunTaggingRateFull.h"
+	],
+	"find":
+	{
+		"height": 35.0
+	},
+	"find_in_files":
+	{
+		"height": 0.0,
+		"where_history":
+		[
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": false,
+		"find_history":
+		[
+			"diBoson",
+			"\"",
+			"echo \"",
+			"RECO_SFUP",
+			"SMT_",
+			"WjetsScaled",
+			"WJetsScaled",
+			"WjetsScaled",
+			"WJetsScaled",
+			"WjetsScaled",
+			"WJetsScaled",
+			"WjetsScaled",
+			"WJetsScaled",
+			"WjetsScaled",
+			"WJetsScaled",
+			"WjetsScaled",
+			"WJetsScaled",
+			"WjetsScaled",
+			"WJetsScaled",
+			"WjetsScaled",
+			"WJetsScaled",
+			"WjetsScaled",
+			"GetRegionYield",
+			"GetCorrectedRegionYield",
+			"return",
+			"if",
+			"  \n",
+			"list_of",
+			"\", \"Njet",
+			"Region A",
+			"tag_A_",
+			"Region",
+			"STANDARD_",
+			"SMTttbarLplusJetsAnalysisMain",
+			"1, mcWgt",
+			"(0, 1",
+			".),\n",
+			"m_isMC",
+			";",
+			" = ",
+			"jet",
+			"(pretag)",
+			"Table()",
+			"     ",
+			"jet",
+			"  (tag)",
+			"(pretag)",
+			"\"pretag\"",
+			"jet",
+			"<latex size=SMALL>\\pm</latex>",
+			"|",
+			"nan",
+			"+-",
+			"QCD QCD",
+			"multi-jet",
+			"multijet",
+			"multi-jet",
+			"jet",
+			"PrintRsmtTable()",
+			"$\\pm$",
+			" |",
+			" | ",
+			"(syst)",
+			" (stat)",
+			"jet",
+			" (pretag)",
+			"<latex size=SMALL>\\pm</latex>",
+			"(pretag)",
+			"jet",
+			"\\pm",
+			"|",
+			"\\pm",
+			"(syst)",
+			"(stat)",
+			"<latex size=SMALL>",
+			"systematic",
+			"WGT",
+			"jets",
+			"multijet",
+			"Multijet",
+			"multijet",
+			"QCD",
+			"(stat)",
+			"(syst)",
+			"iter",
+			"\"\"",
+			"RunTaggingRateFull",
+			"RunTaggingRateFull_h",
+			"#ifndef RunTaggingRateFull_h\n",
+			"RunTaggingRateFull",
+			"RunTaggingRateFull_cxx",
+			"SMTttbarLplusJetsAnalysis",
+			"SMTttbarLplusJetsAnalysis_h",
+			"SMTttbarLplusJetsAnalysis",
+			"m_evtsPassMETPretag",
+			"m_isZsample"
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": false,
+		"replace_history":
+		[
+		],
+		"reverse": false,
+		"show_context": true,
+		"use_buffer2": true,
+		"whole_word": true,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"sheets":
+			[
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 34.0
+	},
+	"input":
+	{
+		"height": 0.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"replace":
+	{
+		"height": 0.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"selected_items":
+		[
+			[
+				"runtaggingrate",
+				"/Users/jayb88/jblanco/MainD3PD/SMTnTupAnalysis/Root/RunTaggingRateFull.cxx"
+			]
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 500.0,
+		"selected_items":
+		[
+		],
+		"width": 380.0
+	},
+	"show_minimap": true,
+	"show_open_files": false,
+	"show_tabs": true,
+	"side_bar_visible": false,
+	"side_bar_width": 96.0,
+	"status_bar_visible": true
+}

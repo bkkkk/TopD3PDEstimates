@@ -24,6 +24,7 @@ private:
 	int jet_bin_;
 	bool is_inclusive_;
 	int sys_mode_;
+	TString br_sys_mode_;
 
 	void init(void);
 	double GetPretagEstimate(void);
@@ -33,11 +34,11 @@ private:
 	double GetSumOfErrors();
 
 public:
-	DoRSMT(int jet_bin, bool is_inclusive, int sys_mode);
+	DoRSMT(int jet_bin = 3, bool is_inclusive = true, int sys_mode = 1, TString br_sys_mode = "" );
 	virtual ~DoRSMT();
 
-	void PrintEstimateTable(TString mode);
-	void PrintRsmtTable(void);
+	void PrintEstimateTable(TString mode, TString table_mode);
+	void PrintRsmtTable(TString table_mode);
 
 	// Region yields correction section
 	double GetDataRegionYield(TString mode, int region);

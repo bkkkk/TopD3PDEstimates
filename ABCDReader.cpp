@@ -14,17 +14,23 @@
 #include "ABCDReader.h"
 #include "AbcdBase.h"
 #include <string>;
+// #define DEBUG
 
 ClassImp(ABCDReader)
 
 ABCDReader::ABCDReader(DataSample* sample, TString mode, int jet_bin,
-		bool is_inclusive, int sys_mode) :
+		bool is_inclusive, int sys_mode, TString br_sys) :
 		sample_(sample), //
 		nA_(0.), nB_(0.), nC_(0.), nD_(0.), //
-		nAError_(0.), nBError_(0.), nCError_(0.), nDError_(0.), isZombie_(0), mode_(
-				mode), jet_bin_(jet_bin), is_inclusive_(is_inclusive), sys_mode_(
-				sys_mode) //
+		nAError_(0.), nBError_(0.), nCError_(0.), nDError_(0.), //
+		isZombie_(0), //
+		mode_(mode), jet_bin_(jet_bin), //
+		is_inclusive_(is_inclusive), sys_mode_(sys_mode), //
+		br_sys_(br_sys)
 {
+#ifdef DEBUG 
+		std::cout << "ABCDReader::Constructor - Debug Point 1" << std::endl;
+#endif 
 	this->setRegionIntegralsAndErrors();
 }
  
@@ -111,11 +117,11 @@ double ABCDReader::GetRegionError(int region) {
 
 // Grabs Yields from histogram
 const double ABCDReader::GetYieldFromSample(int region) {
-	return sample_->GetYield(mode_, region, jet_bin_, is_inclusive_);
+	return sample_->GetYield(mode_, region, jet_bin_, is_inclusive_, br_sys_);
 } // End of GetYieldFromSample
 
 const double ABCDReader::GetYieldErrorFromSample(int region) {
-	return sample_->GetYieldError(mode_, region, jet_bin_, is_inclusive_);
+	return sample_->GetYieldError(mode_, region, jet_bin_, is_inclusive_, br_sys_);
 } // End of GetYieldErrorFromSample
 
 double ABCDReader::GetSystFactor() {

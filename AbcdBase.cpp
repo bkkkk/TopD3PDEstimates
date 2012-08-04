@@ -16,7 +16,7 @@ AbcdBase* AbcdBase::baseInst = new AbcdBase();
 std::string AbcdBase::labelEtcone20 = "E_{T}^{cone20} [GeV]";
 std::string AbcdBase::labelMet = "E_{T}^{miss} [GeV]";
 std::string AbcdBase::labelIsolation = "Isolation";
-TString AbcdBase::pm = "<latex size=SMALL>\\pm</latex>";
+TString AbcdBase::pm = "$\\pm$";
 
 void AbcdBase::drawLine() {
 	std::cout << "----------------------------------------------------"

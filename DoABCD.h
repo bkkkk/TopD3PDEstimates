@@ -26,14 +26,14 @@ private:
 	bool doInclusive_;
 	int jet_bin_;
 	int sysMode_;
+	TString br_sys_;
 
 	void init(void);
 
 public:
-	DoABCD(TString mode = "tag", bool doInclusive_ = false, int jet_bin = 3, int sysMode = 1);
+	DoABCD(TString mode = "tag", bool doInclusive_ = false, int jet_bin = 3, int sysMode = 1, TString br_sys = "");
 	virtual ~DoABCD();
-	void printNdEstimateTable(void);
-
+	void printNdEstimateTable(TString table_mode);
 
 	double getDataRegionYield(int region);
 	double getCorrection(int region);

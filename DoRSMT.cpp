@@ -10,11 +10,13 @@
 #include "math.h"
 #include "AbcdBase.h"
 #include <iomanip>
+// #define DEBUG
 
-DoRSMT::DoRSMT(int jet_bin = 3, bool is_inclusive = true, int sys_mode = 1) :
+DoRSMT::DoRSMT(int jet_bin, bool is_inclusive, int sys_mode, TString br_sys_mode) :
 		jet_bin_(jet_bin), //
 		is_inclusive_(is_inclusive), //
-		sys_mode_(sys_mode) //
+		sys_mode_(sys_mode), //
+		br_sys_mode_(br_sys_mode)
 {
 	list_of_samples.push_back("dataAllEgamma");
 	list_of_samples.push_back("ttbar");
@@ -48,18 +50,20 @@ void DoRSMT::init() {
 	for (unsigned int sample_index = 0; sample_index != list_of_samples.size();
 			sample_index++) {
 		TString samplename = list_of_samples.at(sample_index);
-
+#ifdef DEBUG 
+		std::cout << "DoRSMT::init() - Debug Loading Sample: " << samplename << std::endl;
+#endif 
 		reader_collection_pretag[samplename] = new ABCDReader(
 				new DataSample(samplename), "pretag", jet_bin_, is_inclusive_,
-				sys_mode_);
+				sys_mode_, "");
 		reader_collection_tag[samplename] = new ABCDReader(
 				new DataSample(samplename), "tag", jet_bin_, is_inclusive_,
-				sys_mode_);
+				sys_mode_, br_sys_mode_);
 	}
 	return;
 } // End init
 
-void DoRSMT::PrintRsmtTable() {
+void DoRSMT::PrintRsmtTable(TString table_mode = "nice") {
 
 	double r_smt_A = 100 * this->GetRsmt(AbcdBase::A);
 	double r_smt_B = 100 * this->GetRsmt(AbcdBase::B);
@@ -76,20 +80,48 @@ void DoRSMT::PrintRsmtTable() {
 	double r_smt_C_err_sys = 100 * this->GetRsmtSystError(AbcdBase::C);
 	double r_smt_wgt_err_sys = this->GetRsmtWgtSystErr() * r_smt_wgt;
 
-	std::cout << std::setprecision(4);
-	std::cout << "| " << this->GetLabel() << " | " << r_smt_A << AbcdBase::pm
-			<< r_smt_A_err_stat << "(stat)" << AbcdBase::pm << r_smt_A_err_sys
-			<< "(syst) | " << r_smt_B << AbcdBase::pm << r_smt_B_err_stat
-			<< "(stat)" << AbcdBase::pm << r_smt_B_err_sys << "(syst) | "
-			<< r_smt_C << AbcdBase::pm << r_smt_C_err_stat << "(stat)"
-			<< AbcdBase::pm << r_smt_C_err_sys << "(syst) | " << r_smt_wgt
-			<< AbcdBase::pm << r_smt_wgt_err_stat << AbcdBase::pm
-			<< r_smt_wgt_err_sys << "(syst) | " << std::endl;
+	std::cout << std::setprecision(3);
+
+	std::cout << this->GetLabel() << "\t";
+	if (table_mode.Contains("nice")) {
+
+		double err_A = sqrt(
+				r_smt_A_err_stat * r_smt_A_err_stat
+						+ r_smt_A_err_sys * r_smt_A_err_sys);
+		double err_B = sqrt(
+				r_smt_B_err_stat * r_smt_B_err_stat
+						+ r_smt_B_err_sys * r_smt_B_err_sys);
+		double err_C = sqrt(
+				r_smt_C_err_stat * r_smt_C_err_stat
+						+ r_smt_C_err_sys * r_smt_C_err_sys);
+		double err_wgt = sqrt(
+				r_smt_wgt_err_stat * r_smt_wgt_err_stat
+						+ r_smt_wgt_err_sys * r_smt_wgt_err_sys);
+
+		std::cout << r_smt_A << AbcdBase::pm << err_A << "\t" //
+				<< r_smt_B << AbcdBase::pm << err_B << "\t" //
+				<< r_smt_C << AbcdBase::pm << err_C << "\t" //
+				<< r_smt_wgt << AbcdBase::pm << err_wgt //
+				<< std::endl;
+	} else {
+		std::cout << r_smt_A << AbcdBase::pm << r_smt_A_err_stat << AbcdBase::pm
+				<< r_smt_A_err_sys << "\t"
+				//
+				<< r_smt_B << AbcdBase::pm << r_smt_B_err_stat << AbcdBase::pm
+				<< r_smt_B_err_sys << "\t"
+				//
+				<< r_smt_C << AbcdBase::pm << r_smt_C_err_stat << AbcdBase::pm
+				<< r_smt_C_err_sys << "\t"
+				//
+				<< r_smt_wgt << AbcdBase::pm << r_smt_wgt_err_stat
+				<< AbcdBase::pm << r_smt_wgt_err_sys //
+				<< std::endl;
+	}
 	return;
 }
 
 // Prints out the qcd estimate with stat error
-void DoRSMT::PrintEstimateTable(TString mode) {
+void DoRSMT::PrintEstimateTable(TString mode, TString table_mode = "nice") {
 
 	// Getting integrals for regions in Data plot
 #ifdef DEBUG
@@ -109,10 +141,16 @@ void DoRSMT::PrintEstimateTable(TString mode) {
 
 	// Tidying up
 	std::cout << std::setprecision(1);
-	std::cout << "| " << this->GetLabel() << " (" << mode << ") | "
-			<< std::fixed << nD_estimate << AbcdBase::pm << nD_error << "(stat)"
-			<< AbcdBase::pm << nD_error_syst << "(syst) | " << std::endl;
-
+	std::cout << this->GetLabel() << " (" << mode << ") \t";
+	if (table_mode.Contains("nice")) {
+		double nD_tot_err = sqrt(
+				nD_error_syst * nD_error_syst + nD_error * nD_error);
+		std::cout << std::fixed << nD_estimate << AbcdBase::pm << nD_tot_err
+				<< "\t" << std::endl;
+	} else {
+		std::cout << std::fixed << nD_estimate << AbcdBase::pm << nD_error
+				<< AbcdBase::pm << nD_error_syst << " | " << std::endl;
+	}
 	return;
 }
 /*-----*/
@@ -257,8 +295,10 @@ double DoRSMT::GetRsmtWgtSystErr() {
 	regions.push_back(r_smt_B);
 	regions.push_back(r_smt_C);
 
-	std::vector<double>::iterator smallest = std::min_element(regions.begin(), regions.end());
-	std::vector<double>::iterator largest = std::max_element(regions.begin(), regions.end());
+	std::vector<double>::iterator smallest = std::min_element(regions.begin(),
+			regions.end());
+	std::vector<double>::iterator largest = std::max_element(regions.begin(),
+			regions.end());
 
 	double max_syst = (*largest - *smallest) / *smallest;
 	return (max_syst / 2);
@@ -313,7 +353,8 @@ double DoRSMT::GetTagEstimateSystError(void) {
 	double tag_estimate = this->GetTagEstimate();
 
 	return tag_estimate
-			* sqrt(pretag_estimate_bit * pretag_estimate_bit
+			* sqrt(
+					pretag_estimate_bit * pretag_estimate_bit
 							+ r_smt_wgt_err * r_smt_wgt_err);
 } //
 

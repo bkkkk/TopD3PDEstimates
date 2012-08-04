@@ -8,9 +8,15 @@
 #include "DataSample.h"
 #include <iostream>
 #include "math.h"
+// #define DEBUG
 
 DataSample::DataSample(TString sample_name_) :
 		sample_name(sample_name_) {
+	
+#ifdef DEBUG 
+		std::cout << "DataSample::Constructor - Debug Point 1" << std::endl;
+#endif 
+
 	this->init();
 }
 
@@ -23,52 +29,86 @@ DataSample::~DataSample() {
 }
 
 void DataSample::init() {
+
+#ifdef DEBUG 
+		std::cout << "DataSample::init() - Debug Point 1" << std::endl;
+#endif 
+
 	this->SetSamplePath(Form("./TopD3PDHistos_%s_el.root", sample_name.Data()));
 	file = new TFile(sample_path);
 }
 
-std::vector<TH1D*> DataSample::GetHistos(TString mode) {
+std::vector<TH1D*> DataSample::GetHistos(TString mode, TString sys_br) {
 	std::vector<TH1D*> histos;
 
 	TString suffix = "h_njet";
 	TString regions[] = { "A", "B", "C", "D" };
+	TString sys_br_full = "";
 
+	// If not TTbar ignore BR syst else make name
+	if(sys_br == "") {
+		sys_br_full = "";
+	} else {
+		if(TString(sample_name).Contains("ttbar") != 1) {
+			sys_br_full = "";
+		} else {
+			sys_br_full = "_wgt_" + sys_br;
+		}
+	}
+
+	
 	for (int region_idx = 0; region_idx != 4; region_idx++) {
 		TString region_label = regions[region_idx];
+		
+#ifdef DEBUG 
+		std::cout << "DataSample::GetHistos - Debug Point Histogram Name: " << 
+					Form("%s_%s_%s_el%s", suffix.Data(), mode.Data(),
+						  region_label.Data(), sys_br_full.Data()) << std::endl;
+#endif 
 		histos.push_back(
 				(TH1D*) file->Get(
-						Form("%s_%s_%s_el", suffix.Data(), mode.Data(),
-								region_label.Data())));
+						Form("%s_%s_%s_el%s", suffix.Data(), mode.Data(),
+								region_label.Data(), sys_br_full.Data())));
 	}
 	return histos;
 }
 
 const double DataSample::GetYield(TString mode, int region, int jet_bin,
-		bool is_inclusive) {
+		bool is_inclusive, TString br_sys = "") {
 
+
+
+#ifdef DEBUG 
+		std::cout << "DataSample::GetYield - Debug Point 1" << std::endl;
+#endif 
 	int histo_bin = (jet_bin + 1);
 	double bin_content;
 
 	if (is_inclusive != 0) {
-		bin_content = this->GetHistos(mode).at(region)->Integral(histo_bin, 19);
+		bin_content = this->GetHistos(mode, br_sys).at(region)->Integral(histo_bin, 19);
 	} else {
-		bin_content = this->GetHistos(mode).at(region)->GetBinContent(
+		bin_content = this->GetHistos(mode, br_sys).at(region)->GetBinContent(
 				histo_bin);
 	} // End if is Inclusive
+	
+#ifdef DEBUG 
+	std::cout << "DataSample::GetYield - Debug Point 2" << std::endl;
+#endif 
+
 	return bin_content;
 } // End GetYield
 
 const double DataSample::GetYieldError(TString mode, int region, int jet_bin,
-		bool is_inclusive) {
+		bool is_inclusive, TString br_sys = "") {
 	int histo_bin = (jet_bin + 1);
 	double bin_error = 0;
 	double bin_content = 0;
 
 	if (is_inclusive != 0) {
-		bin_content = this->GetHistos(mode).at(region)->IntegralAndError(
+		bin_content = this->GetHistos(mode, br_sys).at(region)->IntegralAndError(
 				histo_bin, 19, bin_error);
 	} else {
-		bin_error = this->GetHistos(mode).at(region)->GetBinError(histo_bin);
+		bin_error = this->GetHistos(mode, br_sys).at(region)->GetBinError(histo_bin);
 	} // End if Is Inclusive
 
 	return bin_error;
@@ -78,6 +118,8 @@ void DataSample::GetYields() {
 
 	// Loop over modes
 	TString modes[] = { "pretag", "tag" };
+
+	TString br_sys = "";
 
 	// Labels
 	std::cout << "| *Jet-bin* | *A* | *B* | *C* | *D* |" << std::endl;
@@ -116,7 +158,7 @@ void DataSample::GetYields() {
 				std::cout
 						<< Form("%4.2f",
 								this->GetYield(mode, region, jet_bin_actual,
-										inc)) << " | ";
+										inc, br_sys)) << " | ";
 			}
 			std::cout << std::endl;
 		}
@@ -127,7 +169,7 @@ void DataSample::GetYields() {
 const double DataSample::GetContamination(TString mode, int region, int jet_bin,
 		bool is_inclusive) {
 
-	return 100 * this->GetYield(mode, region, jet_bin, is_inclusive)
+	return 100 * this->GetYield(mode, region, jet_bin, is_inclusive, TString(""))
 			/ this->GetDataYield(mode, region, jet_bin, is_inclusive);
 
 }
@@ -135,10 +177,10 @@ const double DataSample::GetContamination(TString mode, int region, int jet_bin,
 const double DataSample::GetContaminationError(TString mode, int region,
 		int jet_bin, bool is_inclusive) {
 
-	double yield = this->GetYield(mode, region, jet_bin, is_inclusive);
+	double yield = this->GetYield(mode, region, jet_bin, is_inclusive, TString(""));
 	double data = this->GetDataYield(mode, region, jet_bin, is_inclusive);
 	double yield_error = this->GetYieldError(mode, region, jet_bin,
-			is_inclusive);
+			is_inclusive, TString(""));
 	double data_error = this->GetDataYieldError(mode, region, jet_bin,
 			is_inclusive);
 
@@ -205,11 +247,11 @@ void DataSample::GetContaminations() {
 double DataSample::GetDataYield(TString mode, int region, int jet_bin,
 		bool is_inclusive) {
 	DataSample* data = new DataSample("dataAllEgamma");
-	return data->GetYield(mode, region, jet_bin, is_inclusive);
+	return data->GetYield(mode, region, jet_bin, is_inclusive, TString(""));
 }
 
 double DataSample::GetDataYieldError(TString mode, int region, int jet_bin,
 		bool is_inclusive) {
 	DataSample* data = new DataSample("dataAllEgamma");
-	return data->GetYieldError(mode, region, jet_bin, is_inclusive);
+	return data->GetYieldError(mode, region, jet_bin, is_inclusive, TString(""));
 }

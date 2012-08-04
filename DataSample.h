@@ -36,10 +36,10 @@ public:
 
 	void init(void);
 
-	std::vector<TH1D*> GetHistos(TString mode);
+	std::vector<TH1D*> GetHistos(TString mode, TString br_sys);
 
-	const double GetYield(TString mode, int region, int jet_bin, bool is_inclusive);
-	const double GetYieldError(TString mode, int region, int jet_bin, bool is_inclusive);
+	const double GetYield(TString mode, int region, int jet_bin, bool is_inclusive, TString br_sys);
+	const double GetYieldError(TString mode, int region, int jet_bin, bool is_inclusive, TString br_sys);
 	const double GetContamination(TString mode, int region, int jet_bin, bool is_inclusive);
 	const double GetContaminationError(TString mode, int region, int jet_bin, bool is_inclusive);
 

@@ -28,9 +28,10 @@
 ClassImp(DoABCD)
 
 // Constructor
-DoABCD::DoABCD(TString mode, bool doInclusive, int jet_bin, int sysMode) :
-		mode_(mode), doInclusive_(doInclusive), jet_bin_(jet_bin), sysMode_(
-				sysMode) {
+DoABCD::DoABCD(TString mode, bool doInclusive, int jet_bin, int sysMode, TString br_sys) :
+		mode_(mode), doInclusive_(doInclusive), //
+		jet_bin_(jet_bin), sysMode_(sysMode), //
+		br_sys_(br_sys) {
 
 	listOfSamples.push_back("dataAllEgamma");
 	listOfSamples.push_back("ttbar");
@@ -61,25 +62,29 @@ void DoABCD::init(void) {
 			sample_index++) {
 		TString samplename = listOfSamples.at(sample_index);
 		reader_collection[samplename] = new ABCDReader(
-				new DataSample(samplename), mode_, jet_bin_, doInclusive_,
-				sysMode_);
+				new DataSample(samplename), mode_, jet_bin_, doInclusive_, sysMode_, br_sys_);
 	}
 	return;
 }
 
 // prints out the qcd estimate with stat error
-void DoABCD::printNdEstimateTable() {
-	TString pm = "<latex size=SMALL>\\pm</latex>";
+void DoABCD::printNdEstimateTable(TString table_mode) {
 	// Getting integrals for regions in Data plot
 	double nDEstimate = this->getNdEstimate();
 	double nDError = this->getNdError();
 	double nDSystErr = this->getNdSystError();
+	double nD_tot_err = sqrt((nDError * nDError) + (nDSystErr * nDSystErr));
+
 	// Tidying up
 	std::cout << std::setprecision(1);
-	std::cout << "| " << this->getLabel() << " | " << std::fixed << nDEstimate
-			<< pm << nDError << " (stat)" << pm << nDSystErr << "(syst) |"
-			<< std::endl;
-
+	if (table_mode.Contains("nice")) {
+		std::cout << this->getLabel() << " " << std::fixed << nDEstimate
+				<< AbcdBase::pm << nD_tot_err << std::endl;
+	} else {
+		std::cout << this->getLabel() << " " << std::fixed << nDEstimate
+				<< AbcdBase::pm << nDError << AbcdBase::pm << nDSystErr
+				<< std::endl;
+	}
 	return;
 }
 /*------------------------------------------------------------------------*/

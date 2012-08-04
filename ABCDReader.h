@@ -31,6 +31,7 @@ private:
 	int jet_bin_;
 	bool is_inclusive_;
 	int sys_mode_;
+	TString br_sys_;
 
 	void setRegionIntegralsAndErrors();
 
@@ -40,7 +41,7 @@ private:
 
 public:
 	ABCDReader(DataSample* sample, TString mode, int jet_bin, bool is_inclusive,
-			int sys_mode);
+			int sys_mode, TString br_sys);
 	virtual ~ABCDReader(void);
 	double GetRegionYield(int region);
 	double GetRegionError(int region);
