@@ -18,6 +18,7 @@ class AbcdBase {
 private:
 	int init();
 	int status;
+	TString getErrorString(std::vector<double>& errors, TString mode);
 
 public:
 
@@ -27,21 +28,29 @@ public:
 	static std::string labelEtcone20;
 	static std::string labelIsolation;
 
-	AbcdBase() {
+	AbcdBase() : status(0) {
 	}
 	virtual ~AbcdBase() {
 	}
 	void isDeadFile(TFile* file);
 	void drawLine(void);
+	void printTableLine(TString label, double central, std::vector<double>& error, TString mode = "nice");
 
 	typedef enum {
 		A = 1, B = 2, C = 3, D = 4
 	} RegionEnum;
 	typedef enum {
+		Nice, Central, Syst, Stat, Latex, Twiki, NONE
+	} TableEnum;
+	typedef enum {
 		MET = 1, ETCONE20 = 2
 	} DimensionEnum;
+	typedef enum {
+		dataAllEgamma, ttbarSig, WjetsScaled, Zjets, singleTop, diBoson
+	} SampleEnum;
 
 	static TString pm;
+	static TString pm_twiki;
 
 
 ClassDef(AbcdBase, 1)

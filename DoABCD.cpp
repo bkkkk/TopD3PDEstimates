@@ -25,6 +25,8 @@
 #include "ABCDReader.h"
 #include "DoABCD.h"
 
+// #define DEBUG
+
 ClassImp(DoABCD)
 
 // Constructor
@@ -34,7 +36,7 @@ DoABCD::DoABCD(TString mode, bool doInclusive, int jet_bin, int sysMode, TString
 		br_sys_(br_sys) {
 
 	listOfSamples.push_back("dataAllEgamma");
-	listOfSamples.push_back("ttbar");
+	listOfSamples.push_back("ttbarSig");
 	listOfSamples.push_back("WJetsScaled");
 	listOfSamples.push_back("Zjets");
 	listOfSamples.push_back("singleTop");
@@ -46,6 +48,9 @@ DoABCD::DoABCD(TString mode, bool doInclusive, int jet_bin, int sysMode, TString
 
 // Destructor
 DoABCD::~DoABCD() {
+#ifdef DEBUG
+	std::cout << "---| DoABCD::~DoABCD Calling Destructor" << std::endl;
+#endif
 	ReaderCollection::iterator iter = reader_collection.begin();
 	ReaderCollection::iterator iter_end = reader_collection.end();
 
@@ -61,6 +66,9 @@ void DoABCD::init(void) {
 	for (unsigned int sample_index = 0; sample_index != listOfSamples.size();
 			sample_index++) {
 		TString samplename = listOfSamples.at(sample_index);
+#ifdef DEBUG
+		std::cout << "DoABCD::init() - Debug Loading Sample: " << samplename << std::endl;
+#endif
 		reader_collection[samplename] = new ABCDReader(
 				new DataSample(samplename), mode_, jet_bin_, doInclusive_, sysMode_, br_sys_);
 	}
@@ -80,9 +88,18 @@ void DoABCD::printNdEstimateTable(TString table_mode) {
 	if (table_mode.Contains("nice")) {
 		std::cout << this->getLabel() << " " << std::fixed << nDEstimate
 				<< AbcdBase::pm << nD_tot_err << std::endl;
+	} else if(table_mode.Contains("central")) {
+		std::cout << this->getLabel() << "\t" << std::fixed << nDEstimate << std::endl;
+	} else if (table_mode.Contains("table")) {
+		std::cout << this->getLabel() << "\t" << std::fixed
+				<< nDEstimate
+				<< "\t" << nD_tot_err
+				<< "\t" << std::endl;
 	} else {
-		std::cout << this->getLabel() << " " << std::fixed << nDEstimate
-				<< AbcdBase::pm << nDError << AbcdBase::pm << nDSystErr
+		std::cout << this->getLabel() << " " << std::fixed
+				<< nDEstimate
+				<< AbcdBase::pm << nDError
+				<< AbcdBase::pm << nDSystErr
 				<< std::endl;
 	}
 	return;
@@ -162,15 +179,21 @@ double DoABCD::getNdError() {
 }
 
 double DoABCD::getNdSystError() {
-	DoABCD* up = new DoABCD(mode_, doInclusive_, jet_bin_, 2);
-	DoABCD* down = new DoABCD(mode_, doInclusive_, jet_bin_, 0);
+	DoABCD* up = new DoABCD(mode_, doInclusive_, jet_bin_, 2, br_sys_);
+	DoABCD* down = new DoABCD(mode_, doInclusive_, jet_bin_, 0, br_sys_);
 
 	double up_est = up->getNdEstimate();
 	double down_est = down->getNdEstimate();
 	double nominal = this->getNdEstimate();
 
 	double error = std::max(fabs(up_est - nominal), fabs(down_est - nominal));
+
+	delete up;
+	delete down;
+
 	return error;
+
+
 }
 
 double DoABCD::getCorrectedRegionYield(int region) {

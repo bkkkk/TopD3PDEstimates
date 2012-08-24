@@ -19,7 +19,7 @@ DoRSMT::DoRSMT(int jet_bin, bool is_inclusive, int sys_mode, TString br_sys_mode
 		br_sys_mode_(br_sys_mode)
 {
 	list_of_samples.push_back("dataAllEgamma");
-	list_of_samples.push_back("ttbar");
+	list_of_samples.push_back("ttbarSig");
 	list_of_samples.push_back("WJetsScaled");
 	list_of_samples.push_back("Zjets");
 	list_of_samples.push_back("singleTop");
@@ -80,7 +80,7 @@ void DoRSMT::PrintRsmtTable(TString table_mode = "nice") {
 	double r_smt_C_err_sys = 100 * this->GetRsmtSystError(AbcdBase::C);
 	double r_smt_wgt_err_sys = this->GetRsmtWgtSystErr() * r_smt_wgt;
 
-	std::cout << std::setprecision(3);
+	std::cout << std::setprecision(5);
 
 	std::cout << this->GetLabel() << "\t";
 	if (table_mode.Contains("nice")) {
@@ -103,6 +103,11 @@ void DoRSMT::PrintRsmtTable(TString table_mode = "nice") {
 				<< r_smt_C << AbcdBase::pm << err_C << "\t" //
 				<< r_smt_wgt << AbcdBase::pm << err_wgt //
 				<< std::endl;
+	} else if (table_mode.Contains("central")) {
+		std::cout << r_smt_A << "\t"
+				  << r_smt_B << "\t"
+				  << r_smt_C << "\t"
+				  << std::endl;
 	} else {
 		std::cout << r_smt_A << AbcdBase::pm << r_smt_A_err_stat << AbcdBase::pm
 				<< r_smt_A_err_sys << "\t"
@@ -300,7 +305,7 @@ double DoRSMT::GetRsmtWgtSystErr() {
 	std::vector<double>::iterator largest = std::max_element(regions.begin(),
 			regions.end());
 
-	double max_syst = (*largest - *smallest) / *smallest;
+	double max_syst = *largest - *smallest;
 	return (max_syst / 2);
 } // End of GetRsmtWgtStatErr
 /*-----*/
@@ -351,11 +356,11 @@ double DoRSMT::GetTagEstimateSystError(void) {
 	double pretag_estimate_bit = pretag_estimate_err / pretag_estimate;
 
 	double tag_estimate = this->GetTagEstimate();
+	double smt_err_relative = r_smt_wgt_err/tag_estimate;
 
 	return tag_estimate
-			* sqrt(
-					pretag_estimate_bit * pretag_estimate_bit
-							+ r_smt_wgt_err * r_smt_wgt_err);
+			* sqrt(pretag_estimate_bit * pretag_estimate_bit
+				    + smt_err_relative * smt_err_relative);
 } //
 
 /*-----*/
@@ -385,7 +390,7 @@ double DoRSMT::GetPretagEstimate() {
 
 	int array_bin = jet_bin_ - 1;
 
-	double estimates[] = { 110678, 29323, 7924, 2377, 3434 };
+	double estimates[] = { 144673, 39614, 11312, 3322, 4858 };
 	double estimate = 0.;
 	if (is_inclusive_ != 1) {
 		estimate = estimates[array_bin];

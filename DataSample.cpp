@@ -11,7 +11,9 @@
 // #define DEBUG
 
 DataSample::DataSample(TString sample_name_) :
-		sample_name(sample_name_) {
+		sample_name(sample_name_),
+		file(NULL),
+		histo_database(NULL){
 	
 #ifdef DEBUG 
 		std::cout << "DataSample::Constructor - Debug Point 1" << std::endl;
@@ -21,6 +23,10 @@ DataSample::DataSample(TString sample_name_) :
 }
 
 DataSample::~DataSample() {
+#ifdef DEBUG
+	std::cout << "---| DataSample::~DataSample Calling Destructor" << std::endl;
+#endif
+
 	file->Close();
 	delete file;
 	sample_name = "";
@@ -49,13 +55,8 @@ std::vector<TH1D*> DataSample::GetHistos(TString mode, TString sys_br) {
 	if(sys_br == "") {
 		sys_br_full = "";
 	} else {
-		if(TString(sample_name).Contains("ttbar") != 1) {
-			sys_br_full = "";
-		} else {
-			sys_br_full = "_wgt_" + sys_br;
-		}
+		sys_br_full = "_wgt_" + sys_br;
 	}
-
 	
 	for (int region_idx = 0; region_idx != 4; region_idx++) {
 		TString region_label = regions[region_idx];
@@ -76,19 +77,18 @@ std::vector<TH1D*> DataSample::GetHistos(TString mode, TString sys_br) {
 const double DataSample::GetYield(TString mode, int region, int jet_bin,
 		bool is_inclusive, TString br_sys = "") {
 
-
-
 #ifdef DEBUG 
 		std::cout << "DataSample::GetYield - Debug Point 1" << std::endl;
 #endif 
 	int histo_bin = (jet_bin + 1);
 	double bin_content;
 
+	TH1D* histo_to_consider = this->GetHistos(mode, br_sys).at(region);
+
 	if (is_inclusive != 0) {
-		bin_content = this->GetHistos(mode, br_sys).at(region)->Integral(histo_bin, 19);
+		bin_content = histo_to_consider->Integral(histo_bin, 19);
 	} else {
-		bin_content = this->GetHistos(mode, br_sys).at(region)->GetBinContent(
-				histo_bin);
+		bin_content = histo_to_consider->GetBinContent(histo_bin);
 	} // End if is Inclusive
 	
 #ifdef DEBUG 
@@ -141,7 +141,7 @@ void DataSample::GetYields() {
 				inc_label = "inc ";
 				if (jet_bin == 5) {
 					jet_bin_actual = 3;
-				} else if (jet_bin == 6) {
+				} else {
 					jet_bin_actual = 4;
 				}
 			} else {
@@ -247,11 +247,15 @@ void DataSample::GetContaminations() {
 double DataSample::GetDataYield(TString mode, int region, int jet_bin,
 		bool is_inclusive) {
 	DataSample* data = new DataSample("dataAllEgamma");
-	return data->GetYield(mode, region, jet_bin, is_inclusive, TString(""));
+	double yield_data = data->GetYield(mode, region, jet_bin, is_inclusive, TString(""));
+	delete data;
+	return yield_data;
 }
 
 double DataSample::GetDataYieldError(TString mode, int region, int jet_bin,
 		bool is_inclusive) {
 	DataSample* data = new DataSample("dataAllEgamma");
-	return data->GetYieldError(mode, region, jet_bin, is_inclusive, TString(""));
+	double yield_data = data->GetYieldError(mode, region, jet_bin, is_inclusive, TString(""));
+	delete data;
+	return yield_data;
 }
