@@ -1,36 +1,31 @@
-/*****
- *****
- ** This is a collection of methods to applying ABCD and calculated
- ** alpha values from DataSample and METvsIso-type objects
- ** By Jacobo Blanco
- **
- ** 		So that I can use these within the interpreter
- *****
- *****/
-// Root Libs
+/**
+ * @file 	DoABCD.cpp
+ * @brief 	DoABCD
+ * @author 	Jacobo Blanco (jayb88@cern.ch)
+ * @date 	Oct. 2011
+ */
+
+// Includes
 #include <TFile.h>
 #include <TH2D.h>
 #include <TString.h>
 #include <TClonesArray.h>
 #include <TCanvas.h>
-
-// C++ standard
 #include <iostream>
 #include <iomanip>
 #include <math.h>
-
-// Custom Classes
 #include "AbcdBase.h"
 #include "DataSample.h"
 #include "ABCDReader.h"
 #include "DoABCD.h"
 
-// #define DEBUG
-
+// Needed by ROOT
 ClassImp(DoABCD)
 
-// Constructor
-DoABCD::DoABCD(TString mode, bool doInclusive, int jet_bin, int sysMode, TString br_sys) :
+// ============================================================================
+
+DoABCD::DoABCD(TString mode, bool doInclusive, int jet_bin, int sysMode,
+		TString br_sys) :
 		mode_(mode), doInclusive_(doInclusive), //
 		jet_bin_(jet_bin), sysMode_(sysMode), //
 		br_sys_(br_sys) {
@@ -44,9 +39,9 @@ DoABCD::DoABCD(TString mode, bool doInclusive, int jet_bin, int sysMode, TString
 
 	this->init();
 }
-/*------------------------------------------------------------------------*/
 
-// Destructor
+// ============================================================================
+
 DoABCD::~DoABCD() {
 #ifdef DEBUG
 	std::cout << "---| DoABCD::~DoABCD Calling Destructor" << std::endl;
@@ -58,7 +53,8 @@ DoABCD::~DoABCD() {
 		delete iter->second;
 	}
 }
-/*------------------------------------------------------------------------*/
+
+// ============================================================================
 
 void DoABCD::init(void) {
 
@@ -70,12 +66,14 @@ void DoABCD::init(void) {
 		std::cout << "DoABCD::init() - Debug Loading Sample: " << samplename << std::endl;
 #endif
 		reader_collection[samplename] = new ABCDReader(
-				new DataSample(samplename), mode_, jet_bin_, doInclusive_, sysMode_, br_sys_);
+				new DataSample(samplename), mode_, jet_bin_, doInclusive_,
+				sysMode_, br_sys_);
 	}
 	return;
 }
 
-// prints out the qcd estimate with stat error
+// ============================================================================
+
 void DoABCD::printNdEstimateTable(TString table_mode) {
 	// Getting integrals for regions in Data plot
 	double nDEstimate = this->getNdEstimate();
@@ -88,25 +86,22 @@ void DoABCD::printNdEstimateTable(TString table_mode) {
 	if (table_mode.Contains("nice")) {
 		std::cout << this->getLabel() << " " << std::fixed << nDEstimate
 				<< AbcdBase::pm << nD_tot_err << std::endl;
-	} else if(table_mode.Contains("central")) {
-		std::cout << this->getLabel() << "\t" << std::fixed << nDEstimate << std::endl;
+	} else if (table_mode.Contains("central")) {
+		std::cout << this->getLabel() << "\t" << std::fixed << nDEstimate
+				<< std::endl;
 	} else if (table_mode.Contains("table")) {
-		std::cout << this->getLabel() << "\t" << std::fixed
-				<< nDEstimate
-				<< "\t" << nD_tot_err
-				<< "\t" << std::endl;
+		std::cout << this->getLabel() << "\t" << std::fixed << nDEstimate
+				<< "\t" << nD_tot_err << "\t" << std::endl;
 	} else {
-		std::cout << this->getLabel() << " " << std::fixed
-				<< nDEstimate
-				<< AbcdBase::pm << nDError
-				<< AbcdBase::pm << nDSystErr
+		std::cout << this->getLabel() << " " << std::fixed << nDEstimate
+				<< AbcdBase::pm << nDError << AbcdBase::pm << nDSystErr
 				<< std::endl;
 	}
 	return;
 }
-/*------------------------------------------------------------------------*/
 
-// Getting correction factors
+// ============================================================================
+
 double DoABCD::getCorrection(int region) {
 	double correction = 0.;
 
@@ -129,7 +124,8 @@ double DoABCD::getCorrection(int region) {
 	}
 	return correction;
 }
-/*------------------------------------------------------------------------*/
+
+// ============================================================================
 
 double DoABCD::getDataRegionYield(int region) {
 	double yield = 0.;
@@ -142,8 +138,8 @@ double DoABCD::getDataRegionYield(int region) {
 	return yield;
 }
 
-// This function returns the estimate of background in the signal region
-// corrected or not corrected
+// ============================================================================
+
 double DoABCD::getNdEstimate() {
 
 	double nA_corr = this->getCorrectedRegionYield(AbcdBase::A);
@@ -152,9 +148,9 @@ double DoABCD::getNdEstimate() {
 
 	return nB_corr * nC_corr / nA_corr;
 }
-/*------------------------------------------------------------------------*/
 
-// This function returns the error on nD
+// ============================================================================
+
 double DoABCD::getNdError() {
 	double nDEstimate = getNdEstimate();
 
@@ -178,6 +174,8 @@ double DoABCD::getNdError() {
 	return errorNd;
 }
 
+// ============================================================================
+
 double DoABCD::getNdSystError() {
 	DoABCD* up = new DoABCD(mode_, doInclusive_, jet_bin_, 2, br_sys_);
 	DoABCD* down = new DoABCD(mode_, doInclusive_, jet_bin_, 0, br_sys_);
@@ -193,8 +191,9 @@ double DoABCD::getNdSystError() {
 
 	return error;
 
-
 }
+
+// ============================================================================
 
 double DoABCD::getCorrectedRegionYield(int region) {
 	double yield = this->getDataRegionYield(region);
@@ -202,7 +201,8 @@ double DoABCD::getCorrectedRegionYield(int region) {
 	return (yield - corr);
 }
 
-// Returns the total corrected error
+// ============================================================================
+
 double DoABCD::getRegionError(int region) {
 	double sumError = 0.;
 	double regError = 0.;
@@ -216,7 +216,8 @@ double DoABCD::getRegionError(int region) {
 
 	return sqrt(sumError);
 }
-/*--------------------------------------------------------------------*/
+
+// ============================================================================
 
 TString DoABCD::getLabel() {
 	TString suffix = "";
@@ -229,3 +230,5 @@ TString DoABCD::getLabel() {
 
 	return label;
 }
+
+// ============================================================================

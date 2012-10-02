@@ -1,32 +1,28 @@
 /*
- * DataSample.cpp
- *
- *  Created on: Jul 3, 2012
- *      Author: jayb88
+ * @file DataSample.cpp
+ * @brief DataSample Definition
+ * @date Jul 3, 2012
+ * @author Jacobo Blanco (jayb88@cern.ch)
  */
 
+// Includes
 #include "DataSample.h"
 #include <iostream>
 #include "math.h"
-// #define DEBUG
+
+// =================================================================================
 
 DataSample::DataSample(TString sample_name_) :
 		sample_name(sample_name_),
 		file(NULL),
 		histo_database(NULL){
 	
-#ifdef DEBUG 
-		std::cout << "DataSample::Constructor - Debug Point 1" << std::endl;
-#endif 
-
 	this->init();
 }
 
-DataSample::~DataSample() {
-#ifdef DEBUG
-	std::cout << "---| DataSample::~DataSample Calling Destructor" << std::endl;
-#endif
+// =================================================================================
 
+DataSample::~DataSample() {
 	file->Close();
 	delete file;
 	sample_name = "";
@@ -34,38 +30,34 @@ DataSample::~DataSample() {
 	sample_full_name = "";
 }
 
+// =================================================================================
+
 void DataSample::init() {
-
-#ifdef DEBUG 
-		std::cout << "DataSample::init() - Debug Point 1" << std::endl;
-#endif 
-
 	this->SetSamplePath(Form("./TopD3PDHistos_%s_el.root", sample_name.Data()));
 	file = new TFile(sample_path);
 }
 
+// =================================================================================
+
 std::vector<TH1D*> DataSample::GetHistos(TString mode, TString sys_br) {
 	std::vector<TH1D*> histos;
 
+	// Strings used for histogram name formation
 	TString suffix = "h_njet";
 	TString regions[] = { "A", "B", "C", "D" };
 	TString sys_br_full = "";
 
-	// If not TTbar ignore BR syst else make name
+	// If no systematic requested return unweighted historam
 	if(sys_br == "") {
 		sys_br_full = "";
 	} else {
 		sys_br_full = "_wgt_" + sys_br;
 	}
 	
+	// Loop over all regions, format correct name for histogram and add to vector
 	for (int region_idx = 0; region_idx != 4; region_idx++) {
 		TString region_label = regions[region_idx];
 		
-#ifdef DEBUG 
-		std::cout << "DataSample::GetHistos - Debug Point Histogram Name: " << 
-					Form("%s_%s_%s_el%s", suffix.Data(), mode.Data(),
-						  region_label.Data(), sys_br_full.Data()) << std::endl;
-#endif 
 		histos.push_back(
 				(TH1D*) file->Get(
 						Form("%s_%s_%s_el%s", suffix.Data(), mode.Data(),
@@ -74,12 +66,11 @@ std::vector<TH1D*> DataSample::GetHistos(TString mode, TString sys_br) {
 	return histos;
 }
 
+// =================================================================================
+
 const double DataSample::GetYield(TString mode, int region, int jet_bin,
 		bool is_inclusive, TString br_sys = "") {
 
-#ifdef DEBUG 
-		std::cout << "DataSample::GetYield - Debug Point 1" << std::endl;
-#endif 
 	int histo_bin = (jet_bin + 1);
 	double bin_content;
 
@@ -91,12 +82,11 @@ const double DataSample::GetYield(TString mode, int region, int jet_bin,
 		bin_content = histo_to_consider->GetBinContent(histo_bin);
 	} // End if is Inclusive
 	
-#ifdef DEBUG 
-	std::cout << "DataSample::GetYield - Debug Point 2" << std::endl;
-#endif 
 
 	return bin_content;
 } // End GetYield
+
+// =================================================================================
 
 const double DataSample::GetYieldError(TString mode, int region, int jet_bin,
 		bool is_inclusive, TString br_sys = "") {
@@ -113,6 +103,8 @@ const double DataSample::GetYieldError(TString mode, int region, int jet_bin,
 
 	return bin_error;
 } // End GetYieldError
+
+// =================================================================================
 
 void DataSample::GetYields() {
 
@@ -166,6 +158,8 @@ void DataSample::GetYields() {
 	return;
 }
 
+// =================================================================================
+
 const double DataSample::GetContamination(TString mode, int region, int jet_bin,
 		bool is_inclusive) {
 
@@ -173,6 +167,8 @@ const double DataSample::GetContamination(TString mode, int region, int jet_bin,
 			/ this->GetDataYield(mode, region, jet_bin, is_inclusive);
 
 }
+
+// =================================================================================
 
 const double DataSample::GetContaminationError(TString mode, int region,
 		int jet_bin, bool is_inclusive) {
@@ -190,6 +186,8 @@ const double DataSample::GetContaminationError(TString mode, int region,
 
 	return cont * sqrt((yield_sigma*yield_sigma)  + (data_sigma*data_sigma));
 } // End GetContaminationError
+
+// =================================================================================
 
 void DataSample::GetContaminations() {
 
@@ -244,6 +242,8 @@ void DataSample::GetContaminations() {
 	return;
 }
 
+// =================================================================================
+
 double DataSample::GetDataYield(TString mode, int region, int jet_bin,
 		bool is_inclusive) {
 	DataSample* data = new DataSample("dataAllEgamma");
@@ -252,6 +252,8 @@ double DataSample::GetDataYield(TString mode, int region, int jet_bin,
 	return yield_data;
 }
 
+// =================================================================================
+
 double DataSample::GetDataYieldError(TString mode, int region, int jet_bin,
 		bool is_inclusive) {
 	DataSample* data = new DataSample("dataAllEgamma");
@@ -259,3 +261,5 @@ double DataSample::GetDataYieldError(TString mode, int region, int jet_bin,
 	delete data;
 	return yield_data;
 }
+
+// =================================================================================
