@@ -1,6 +1,6 @@
-/*
+/**
  * @file DataSample.cpp
- * @brief DataSample Definition
+ * @brief DataSample Implementation
  * @date Jul 3, 2012
  * @author Jacobo Blanco (jayb88@cern.ch)
  */

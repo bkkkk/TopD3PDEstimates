@@ -1,6 +1,6 @@
 /**
  * @file 	DoABCD.h
- * @brief 	DoABCD
+ * @brief 	DoABCD Definition
  * @author 	Jacobo Blanco (jayb88@cern.ch)
  * @date 	Oct. 2011
  */

@@ -107,6 +107,9 @@ TString AbcdBase::getErrorString(std::vector<double>& error,
 	case Twiki:
 		delimiter = AbcdBase::pm_twiki;
 		break;
+	case Central:
+		delimiter = "";
+		break;
 	}
 
 	// Output error string correctly formatted

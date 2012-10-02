@@ -15,8 +15,6 @@
 /**
  * @class DoRSMT
  * @brief Does the MatrixMethod based analysis by calculating a tagging rate
- *
- *
  */
 class DoRSMT {
 

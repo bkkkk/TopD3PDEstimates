@@ -1,6 +1,6 @@
 /**
  * @file 	DoABCD.cpp
- * @brief 	DoABCD
+ * @brief 	DoABCD Implementation
  * @author 	Jacobo Blanco (jayb88@cern.ch)
  * @date 	Oct. 2011
  */

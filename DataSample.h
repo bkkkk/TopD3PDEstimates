@@ -1,6 +1,6 @@
 /**
  * @file DataSample.h
- * @brief DataSample Implementation
+ * @brief DataSample Definition
  * @date Jul 3, 2012
  * @author Jacobo Blanco (jayb88@cern.ch)
  */
@@ -235,18 +235,17 @@ private:
 	double GetDataYieldError(TString mode, int region, int jet_bin,
 			bool is_inclusive);
 
+	// Sample properties
+	TString sample_name; /**< Sample name */
+	TString sample_path; /**< Sample path */
+	TString sample_full_name; /**< Sample full name */
+
 	// Data members
 	TFile* file; /**< Pointer to dataset file*/
 
 	// Histogram collection
 	typedef std::map<TString, TH1D*> HistoDatabase; /**< Type histogram container */
 	HistoDatabase *histo_database; /**< Histogram container object */
-
-	// Sample properties
-	TString sample_name; /**< Sample name */
-	TString sample_path; /**< Sample path */
-	TString sample_full_name; /**< Sample full name */
-
 };
 
 #endif /* DATASAMPLE_H_ */
