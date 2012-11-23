@@ -41,7 +41,7 @@ public:
 	typedef enum {
 		Pretag,	/**< Pretag index */
 		Tagged	/**< Tagged index */
-	}EModeType;
+	} EModeType;
 
 	/**
 	 * ABCD Regions
@@ -49,7 +49,7 @@ public:
 	 */
 	typedef enum {
 		A = 1, B = 2, C = 3, D = 4
-	} RegionEnum;
+	} ERegionEnum;
 
 	/**
 	 * Table formats
@@ -68,8 +68,8 @@ public:
 	 * Index for error format
 	 */
 	typedef enum {
-		Breakdown, /**< Print out uncertainties separately */
-		Total /** Print out total uncertainty */
+		Breakdown, 	/**< Print out uncertainties separately */
+		Total		/** Print out total uncertainty */
 	} EErrorFormat;
 
 	/**
@@ -79,7 +79,7 @@ public:
 	typedef enum {
 		MET = 1, 		/**< MET dimension of ABCD Plane*/
 		ETCONE20 = 2 	/**< Etcone20 dimension of ABCD Plane*/
-	} DimensionEnum;
+	} EDimensions;
 
 	/**
 	 * List of datasets
@@ -92,7 +92,23 @@ public:
 		Zjets, 			/**< Z+jets MC */
 		singleTop,		/**< SingleTop MC */
 		diBoson			/**< Diboson MC */
-	} SampleEnum;
+	} ESampleSets;
+
+	/**
+	 * List of BR systematics
+	 */
+	typedef enum {
+		B_MU_UP = 11,			/**< B->Mu Up Variation */
+		B_MU_DOWN = 12,			/**< B->Mu Down Variation */
+		B_TAU_MU_UP = 21,		/**< B->Tau Up Variation */
+		B_TAU_MU_DOWN = 22,		/**< B->Mu Down Variation */
+		B_D_MUPLUS_UP = 31,		/**< B->Mu+ Up Variation */
+		B_D_MUPLUS_DOWN = 32,	/**< B->Mu+ Down Variation */
+		B_D_MUMINUS_UP = 41,	/**< B->Mu- Up Variation */
+		B_D_MUMINUS_DOWN = 42,	/**< B->Mu- Down Variation */
+		C_MU_UP = 51,			/**< c->Mu Up Variation */
+		C_MU_DOWN = 52			/**< c->Mu Down Variation */
+	} EBrVariations;
 
 	/**
 	 * Basic constructor
